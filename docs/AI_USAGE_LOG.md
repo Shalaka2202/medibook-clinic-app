@@ -1,0 +1,173 @@
+# AI Usage Log & Reflection Report
+
+**Student:** [Shalaka Kailas Shirke]  
+**ID:** [2025tm93103]  
+**Course:** SE ZG503 – Full Stack Application Development  
+**Assignment:** Web Application Development  
+**AI Tool Used:** Claude (Anthropic) — claude.ai  
+
+---
+
+## 1. Overview
+
+This project was built using **Option A: Build from scratch with AI assistance**. Claude was used as a pair-programming and architecture assistant throughout the development cycle.
+
+---
+
+## 2. AI Tool Used
+
+**Tool:** Claude (claude.ai) — Claude Sonnet model  
+**Usage mode:** Conversational prompting through the web interface  
+**Approach:** I described the problem statement, requirements, and constraints; Claude generated code which I reviewed, tested, and integrated.
+
+---
+
+## 3. AI Usage Log — Prompts & Outcomes
+
+### Session 1 — Architecture & Problem Design
+
+**Prompt:**
+> "I need to build a full-stack web app for a BITS FSAD assignment. I want to build a clinic appointment booking system. What should the data model look like, and what tech stack would you recommend for React frontend + Node.js backend?"
+
+**AI Output:** Suggested a 3-table schema (users, doctors, appointments), recommended JWT for auth, bcryptjs for password hashing, better-sqlite3 for a lightweight embedded database, and React Router + Axios for the frontend.
+
+**What I did:** Accepted the schema suggestion, modified the `appointments` table to include `notes` and `prescription` fields to support the doctor workflow better.
+
+---
+
+### Session 2 — Backend API Routes
+
+**Prompt:**
+> "Generate an Express.js route file for appointments. It should handle: GET all (role-based filtering), POST new booking (with conflict detection), PATCH to update status, DELETE for admin. Use JWT middleware."
+
+**AI Output:** Generated `appointments.js` route with role-based filtering logic and conflict detection using a UNIQUE constraint.
+
+**What I did:** Reviewed the SQL queries, validated the role-check logic, added the check that prevents booking past dates (the AI's initial version didn't have this).
+
+---
+
+### Session 3 — Slot Generation Logic
+
+**Prompt:**
+> "How should I generate available time slots for a doctor between 9am and 5pm in 30-minute increments, and filter out already-booked ones from the DB?"
+
+**AI Output:** Wrote the slot generation loop and DB query to fetch booked slots, then map them to `{ time, available }` objects.
+
+**What I did:** Manually traced through the slot generation logic, tested edge cases (last slot at 16:30), and validated that the `dayOfWeek` check using JS's `getDay()` was correct.
+
+---
+
+### Session 4 — React Frontend Components
+
+**Prompt:**
+> "Build a React BookAppointment page. It should: fetch doctor details by ID from params, show a date picker, fetch available slots when date changes, let the user pick a slot and enter symptoms, then POST to create appointment. Show a success state after."
+
+**AI Output:** Generated the full `BookAppointment.js` component using `useEffect`, `useState`, and `useParams`.
+
+**What I did:** Fixed a bug where the slots were being re-fetched on every render (AI used `date` in a useEffect without proper dependency handling). Also improved UX by disabling the submit button while booking is in progress.
+
+---
+
+### Session 5 — CSS Design System
+
+**Prompt:**
+> "Create a clean, professional CSS design system using CSS variables for a health clinic app. I want a warm neutral background, emerald green accent color, good typography with DM Serif Display for headings and DM Sans for body. Include utilities for cards, buttons, forms, badges, grids, and responsive slots grid."
+
+**AI Output:** Generated the full `index.css` with the design system.
+
+**What I did:** Tuned the color palette (made the greens slightly deeper), adjusted card padding, and added the `.table` styles which were missing.
+
+---
+
+### Session 6 — API Documentation
+
+**Prompt:**
+> "Write comprehensive API documentation in Markdown for the REST API. Include each endpoint, method, auth requirements, request body, and response examples."
+
+**AI Output:** Generated `API.md` with all endpoints documented.
+
+**What I did:** Verified each endpoint matched the actual implementation, corrected 2 parameter names that had been renamed during development.
+
+---
+
+### Session 7 — Debugging
+
+**Issue:** The admin stats endpoint was returning `undefined` for `todayAppointments`.
+
+**Prompt:**
+> "My SQLite query `SELECT COUNT(*) as count FROM appointments WHERE appointment_date = date('now')` returns 0 even though I have appointments for today. What's wrong?"
+
+**AI Output:** Explained that `date('now')` in SQLite uses UTC, and if the system is in IST (UTC+5:30), the date might be off. Suggested explicitly passing today's date from Node.js as a parameter.
+
+**What I did:** Verified this was the issue, fixed by passing `new Date().toISOString().split('T')[0]` from the backend, and noted this as an important timezone consideration.
+
+---
+
+## 4. Parts Generated by AI vs Manually Coded
+
+| Component | AI-generated | Manual |
+|-----------|-------------|--------|
+| DB schema design | Suggested | Modified (added notes/prescription) |
+| `db.js` seed data | ~70% | 30% (added doctors, tuned seed) |
+| Backend route files | ~75% | 25% (bug fixes, past-date check) |
+| JWT middleware | 90% | 10% |
+| Slot generation logic | 80% | 20% |
+| Frontend pages | 70% | 30% |
+| CSS design system | 75% | 25% (color tuning, table styles) |
+| README + docs | 60% | 40% |
+| Debugging fixes | Suggested diagnosis | I implemented fixes |
+
+---
+
+## 5. Reflection
+
+### Did AI help or hinder understanding?
+
+**Helped significantly:**
+- AI accelerated boilerplate — writing Express route scaffolding by hand would have taken 2-3× longer.
+- It suggested patterns I was less familiar with (e.g., using `better-sqlite3`'s synchronous API instead of async, which simplified the Express handlers greatly).
+- It helped me think through the role-based access logic systematically.
+
+**Hindered slightly:**
+- The AI's first version of `BookAppointment.js` had a subtle React `useEffect` dependency bug that I only caught by running the app and noticing excessive network requests. Blindly trusting the output would have shipped a bug.
+- AI-generated CSS was comprehensive but generic — I had to tune the aesthetic choices to feel more intentional and less "boilerplate."
+
+### Issues encountered integrating AI output
+
+1. **Timezone bug** in SQLite's `date('now')` — fixed after debugging with AI's guidance.
+2. **Missing `past-date` validation** — the booking route didn't reject past dates initially. I added this manually.
+3. **React StrictMode double-render** — some AI patterns trigger double API calls in StrictMode. Addressed by using cleanup flags in `useEffect`.
+4. **Inconsistent variable naming** — AI sometimes used `doctorId` and sometimes `doctor_id` inconsistently across backend/frontend. Required a pass to normalize.
+
+### What I learned from debugging AI-generated code
+
+- AI-generated code is syntactically correct but can miss domain-specific edge cases (past-date booking, timezone handling).
+- Always read SQL queries carefully — small differences in column names or table aliases can cause silent failures.
+- React hooks patterns from AI need extra scrutiny around dependency arrays.
+- AI is excellent for generating the 80% common case; the remaining 20% requires domain judgment and testing.
+
+---
+
+## 6. Example Prompts Summary
+
+| # | Prompt Summary | Effectiveness |
+|---|----------------|---------------|
+| 1 | Architecture & tech stack choice | ⭐⭐⭐⭐⭐ Excellent |
+| 2 | Express CRUD route with auth | ⭐⭐⭐⭐ Good, minor fixes needed |
+| 3 | Slot generation logic | ⭐⭐⭐⭐⭐ Very accurate |
+| 4 | React booking page component | ⭐⭐⭐⭐ Good, had useEffect bug |
+| 5 | CSS design system | ⭐⭐⭐⭐ Good, needed aesthetic tuning |
+| 6 | API documentation | ⭐⭐⭐⭐⭐ Excellent |
+| 7 | Debugging SQLite timezone | ⭐⭐⭐⭐⭐ Identified root cause correctly |
+
+---
+
+## 7. Conclusion
+
+Using Claude as a development assistant increased my productivity by an estimated **2-3×**. The most valuable use cases were: initial architecture design, generating repetitive boilerplate (route files, CSS utilities), and debugging with a specific error description. The tool worked best when I provided clear, specific prompts with context about the tech stack and constraints.
+
+The experience reinforced that AI tools are powerful force-multipliers but not replacements for understanding. Every generated piece of code required review, testing, and often modification. The debugging phase — where I had to understand why something wasn't working — was where genuine learning happened, and AI assistance here (explaining root causes) was also highly valuable.
+
+---
+
+*This log was written manually and reflects actual interactions during development.*
