@@ -1,0 +1,112 @@
+<svg viewBox="0 0 900 580" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2D6A4F"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="580" fill="#F8F6F1"/>
+  <text x="450" y="36" text-anchor="middle" font-size="22" font-weight="bold" fill="#1A1714">MediBook – System Architecture</text>
+
+  <!-- Users -->
+  <g transform="translate(30, 80)">
+    <rect width="120" height="80" rx="12" fill="#E8F5EE" stroke="#2D6A4F" stroke-width="1.5"/>
+    <text x="60" y="28" text-anchor="middle" font-size="28">👥</text>
+    <text x="60" y="50" text-anchor="middle" font-size="13" font-weight="bold" fill="#1A1714">Users</text>
+    <text x="60" y="66" text-anchor="middle" font-size="11" fill="#6b6560">Patient / Doctor</text>
+    <text x="60" y="78" text-anchor="middle" font-size="11" fill="#6b6560">/ Admin</text>
+  </g>
+
+  <!-- Browser -->
+  <g transform="translate(30, 210)">
+    <rect width="120" height="70" rx="12" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+    <text x="60" y="24" text-anchor="middle" font-size="24">🌐</text>
+    <text x="60" y="44" text-anchor="middle" font-size="13" font-weight="bold" fill="#1A1714">Browser</text>
+    <text x="60" y="58" text-anchor="middle" font-size="11" fill="#6b6560">Chrome / Firefox</text>
+  </g>
+
+  <!-- Arrow users->browser -->
+  <line x1="90" y1="162" x2="90" y2="208" stroke="#2D6A4F" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- React App Box -->
+  <g transform="translate(200, 80)">
+    <rect width="200" height="260" rx="14" fill="#fff" stroke="#2D6A4F" stroke-width="2"/>
+    <rect width="200" height="38" rx="14" fill="#2D6A4F"/>
+    <rect y="24" width="200" height="14" fill="#2D6A4F"/>
+    <text x="100" y="25" text-anchor="middle" font-size="14" font-weight="bold" fill="white">React Frontend :3000</text>
+    <text x="12" y="65" font-size="12" font-weight="bold" fill="#1A5C3A">Pages</text>
+    <text x="12" y="83" font-size="11" fill="#444">• Home (public)</text>
+    <text x="12" y="98" font-size="11" fill="#444">• Doctors listing + search</text>
+    <text x="12" y="113" font-size="11" fill="#444">• BookAppointment (slots)</text>
+    <text x="12" y="128" font-size="11" fill="#444">• MyAppointments (patient)</text>
+    <text x="12" y="143" font-size="11" fill="#444">• DoctorDashboard</text>
+    <text x="12" y="158" font-size="11" fill="#444">• AdminDashboard</text>
+    <line x1="12" y1="170" x2="188" y2="170" stroke="#eee" stroke-width="1"/>
+    <text x="12" y="188" font-size="12" font-weight="bold" fill="#1A5C3A">State / Services</text>
+    <text x="12" y="206" font-size="11" fill="#444">• AuthContext (JWT, user)</text>
+    <text x="12" y="221" font-size="11" fill="#444">• api.js (Axios + interceptor)</text>
+    <text x="12" y="236" font-size="11" fill="#444">• React Router v6</text>
+    <text x="12" y="251" font-size="11" fill="#444">• ProtectedRoute guard</text>
+  </g>
+
+  <!-- Arrow browser->react -->
+  <line x1="152" y1="245" x2="198" y2="210" stroke="#2D6A4F" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="198" y1="220" x2="152" y2="250" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+
+  <!-- Arrow React->Express -->
+  <line x1="402" y1="210" x2="468" y2="210" stroke="#2D6A4F" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="430" y="203" text-anchor="middle" font-size="10" fill="#2D6A4F">REST + JWT</text>
+  <line x1="468" y1="224" x2="402" y2="224" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+  <text x="430" y="240" text-anchor="middle" font-size="10" fill="#888">JSON</text>
+
+  <!-- Express Box -->
+  <g transform="translate(470, 80)">
+    <rect width="200" height="260" rx="14" fill="#fff" stroke="#2D6A4F" stroke-width="2"/>
+    <rect width="200" height="38" rx="14" fill="#2D6A4F"/>
+    <rect y="24" width="200" height="14" fill="#2D6A4F"/>
+    <text x="100" y="25" text-anchor="middle" font-size="14" font-weight="bold" fill="white">Express Backend :5000</text>
+    <text x="12" y="65" font-size="12" font-weight="bold" fill="#1A5C3A">Middleware</text>
+    <text x="12" y="83" font-size="11" fill="#444">• CORS</text>
+    <text x="12" y="98" font-size="11" fill="#444">• express.json()</text>
+    <text x="12" y="113" font-size="11" fill="#444">• JWT authMiddleware</text>
+    <text x="12" y="128" font-size="11" fill="#444">• requireRole() guard</text>
+    <line x1="12" y1="140" x2="188" y2="140" stroke="#eee" stroke-width="1"/>
+    <text x="12" y="158" font-size="12" font-weight="bold" fill="#1A5C3A">Routes</text>
+    <text x="12" y="176" font-size="11" fill="#444">• /api/auth</text>
+    <text x="12" y="191" font-size="11" fill="#444">• /api/doctors</text>
+    <text x="12" y="206" font-size="11" fill="#444">• /api/appointments</text>
+    <text x="12" y="221" font-size="11" fill="#444">• /api/patients</text>
+    <text x="12" y="236" font-size="11" fill="#444">• /api/admin</text>
+    <text x="12" y="251" font-size="11" fill="#444">• /api/health</text>
+  </g>
+
+  <!-- Arrow Express->DB -->
+  <line x1="672" y1="210" x2="738" y2="210" stroke="#2D6A4F" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="703" y="203" text-anchor="middle" font-size="10" fill="#2D6A4F">sql.js</text>
+  <line x1="738" y1="224" x2="672" y2="224" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+  <text x="703" y="240" text-anchor="middle" font-size="10" fill="#888">rows</text>
+
+  <!-- SQLite DB -->
+  <g transform="translate(740, 120)">
+    <rect width="140" height="180" rx="14" fill="#fff" stroke="#2D6A4F" stroke-width="2"/>
+    <rect width="140" height="38" rx="14" fill="#2D6A4F"/>
+    <rect y="24" width="140" height="14" fill="#2D6A4F"/>
+    <text x="70" y="25" text-anchor="middle" font-size="13" font-weight="bold" fill="white">SQLite (sql.js)</text>
+    <text x="12" y="60" font-size="12" font-weight="bold" fill="#1A5C3A">Tables</text>
+    <text x="12" y="78" font-size="11" fill="#444">📋 users</text>
+    <text x="12" y="98" font-size="11" fill="#444">👨‍⚕️ doctors</text>
+    <text x="12" y="118" font-size="11" fill="#444">🗓 appointments</text>
+    <line x1="12" y1="130" x2="128" y2="130" stroke="#eee" stroke-width="1"/>
+    <text x="12" y="148" font-size="11" fill="#888">clinic.db</text>
+    <text x="12" y="163" font-size="11" fill="#888">Auto-seeded</text>
+  </g>
+
+  <!-- Data flow label -->
+  <rect x="30" y="430" width="840" height="130" rx="12" fill="white" stroke="#e2ddd4" stroke-width="1.5"/>
+  <text x="50" y="455" font-size="13" font-weight="bold" fill="#2D6A4F">Request Lifecycle</text>
+  <text x="50" y="476" font-size="12" fill="#444">1. User action triggers React event handler</text>
+  <text x="50" y="495" font-size="12" fill="#444">2. api.js (Axios) sends HTTP request with JWT Bearer token in Authorization header</text>
+  <text x="50" y="514" font-size="12" fill="#444">3. Express authMiddleware validates JWT → attaches req.user → requireRole() checks access</text>
+  <text x="50" y="533" font-size="12" fill="#444">4. Route handler queries SQLite via sql.js helper functions (get/all/run)</text>
+  <text x="50" y="552" font-size="12" fill="#444">5. JSON response → Axios → React setState → UI re-renders</text>
+</svg>
