@@ -1,9 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 
 export default function Home() {
   const { user } = useAuth();
+  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Simulate form submission
+    setSubmitted(true);
+    setTimeout(() => {
+      setSubmitted(false);
+      setForm({ name: '', email: '', subject: '', message: '' });
+    }, 3000);
+  };
 
   return (
     <div>
@@ -43,22 +55,119 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Demo Credentials */}
-        <div className="card" style={{ marginTop: 48, background: 'var(--accent-light)', border: '1px solid #b7dfc8' }}>
-          <h3 style={{ marginBottom: 16, fontSize: 20 }}>🔑 Demo Credentials</h3>
-          <div className="grid-3" style={{ gap: 12 }}>
-            {[
-              { role: 'Patient', email: 'ravi@example.com', pwd: 'patient123' },
-              { role: 'Doctor', email: 'priya@clinic.com', pwd: 'doctor123' },
-              { role: 'Admin', email: 'admin@clinic.com', pwd: 'admin123' },
-            ].map(c => (
-              <div key={c.role} style={{ background: 'white', borderRadius: 8, padding: 16 }}>
-                <div style={{ fontWeight: 600, marginBottom: 6, color: 'var(--accent)' }}>{c.role}</div>
-                <div style={{ fontSize: 13, color: 'var(--text2)' }}>{c.email}</div>
-                <div style={{ fontSize: 13, color: 'var(--text2)' }}>Password: <code>{c.pwd}</code></div>
-              </div>
-            ))}
+        {/* Contact Us */}
+        <div style={{ marginTop: 64 }}>
+          <div style={{ textAlign: 'center', marginBottom: 40 }}>
+            <h2 style={{ fontSize: 36, marginBottom: 12 }}>Contact Us</h2>
+            <p style={{ color: 'var(--text2)', fontSize: 16 }}>Have a question or need help? We're here for you.</p>
           </div>
+
+          <div className="grid-2" style={{ gap: 40, alignItems: 'start' }}>
+
+            {/* Contact Info */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              {[
+                {
+                  icon: '📍',
+                  title: 'Our Location',
+                  lines: ['MediBook Health Centre', '12, Wellness Avenue, Koregaon Park', 'Pune, Maharashtra – 411001'],
+                },
+                {
+                  icon: '📞',
+                  title: 'Phone',
+                  lines: ['+91 20 4567 8900', 'Mon – Sat, 9:00 AM – 6:00 PM'],
+                },
+                {
+                  icon: '✉️',
+                  title: 'Email',
+                  lines: ['support@medibook.in', 'appointments@medibook.in'],
+                },
+                {
+                  icon: '🕐',
+                  title: 'Working Hours',
+                  lines: ['Monday – Friday: 9:00 AM – 7:00 PM', 'Saturday: 9:00 AM – 4:00 PM', 'Sunday: Closed'],
+                },
+              ].map(item => (
+                <div key={item.title} style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+                  <div style={{
+                    width: 44, height: 44, borderRadius: 10,
+                    background: 'var(--accent-light)', display: 'flex',
+                    alignItems: 'center', justifyContent: 'center',
+                    fontSize: 20, flexShrink: 0,
+                  }}>
+                    {item.icon}
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 600, marginBottom: 4, fontSize: 15 }}>{item.title}</div>
+                    {item.lines.map(line => (
+                      <div key={line} style={{ fontSize: 13, color: 'var(--text2)', lineHeight: 1.7 }}>{line}</div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Contact Form */}
+            <div className="card">
+              {submitted ? (
+                <div style={{ textAlign: 'center', padding: '32px 0' }}>
+                  <div style={{ fontSize: 48, marginBottom: 16 }}>✅</div>
+                  <h3 style={{ fontSize: 22, marginBottom: 8 }}>Message Sent!</h3>
+                  <p style={{ color: 'var(--text2)' }}>Thank you for reaching out. We'll get back to you within 24 hours.</p>
+                </div>
+              ) : (
+                <>
+                  <h3 style={{ fontSize: 20, marginBottom: 20 }}>Send us a message</h3>
+                  <form onSubmit={handleSubmit}>
+                    <div className="grid-2" style={{ gap: 12 }}>
+                      <div className="form-group">
+                        <label className="form-label">Your Name</label>
+                        <input className="form-input" required placeholder="Ravi Kumar"
+                          value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Email Address</label>
+                        <input className="form-input" type="email" required placeholder="you@example.com"
+                          value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Subject</label>
+                      <select className="form-input form-select"
+                        value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} required>
+                        <option value="">Select a subject</option>
+                        <option>Appointment Query</option>
+                        <option>Billing & Payments</option>
+                        <option>Doctor Availability</option>
+                        <option>Technical Support</option>
+                        <option>General Enquiry</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Message</label>
+                      <textarea className="form-input" rows={4} required
+                        placeholder="Write your message here..."
+                        style={{ resize: 'vertical' }}
+                        value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} />
+                    </div>
+                    <button type="submit" className="btn btn-primary"
+                      style={{ width: '100%', justifyContent: 'center', padding: 12 }}>
+                      Send Message
+                    </button>
+                  </form>
+                </>
+              )}
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* Footer strip */}
+      <div style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)', padding: '24px 0', marginTop: 64 }}>
+        <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+          <div style={{ fontSize: 14, color: 'var(--text2)' }}>© 2026 MediBook. All rights reserved.</div>
+          <div style={{ fontSize: 13, color: 'var(--text3)' }}>Made with ❤️ for better healthcare</div>
         </div>
       </div>
     </div>
